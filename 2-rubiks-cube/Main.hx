@@ -15,10 +15,10 @@ import h3d.prim.Cube;
 	@date 2019-05-15
 */
 
+
 class SubCube extends Object {
 	public function new(parent: Object) {
 		super(parent);
-		
 		var a = new SubCubeFace(this, 0xffff00);
 		var b = new SubCubeFace(this, 0xff0000);
 		b.rotate(Math.PI / 2, 0, 0);
@@ -38,12 +38,14 @@ class SubCubeFace extends Object {
 		super(parent);
 
 		var buffer = new IndexBuffer();
-		buffer.push(0); buffer.push(1); buffer.push(2);
-		buffer.push(0); buffer.push(2); buffer.push(3);
+		var idxCounterClockwise = [0, 1, 2, 0, 2, 3];
 
-		// buffer.push(0); buffer.push(3); buffer.push(2);
-		// buffer.push(2); buffer.push(1); buffer.push(0);
+		idxCounterClockwise.map(i -> buffer.push(i));
 
+		// uncomment for both faces
+		// var idxClockwise = idxCounterClockwise.copy();
+		// idxClockwise.reverse();
+		// idxClockwise.map(i -> buffer.push(i));
 
 		var prim = new Polygon([
 			new Point(0, 0, 0), 
@@ -71,15 +73,25 @@ class Main extends hxd.App {
 
 	override function init() {
 
-		new SubCube(s3d);
+		for(x in 0...3) {
+			for(y in 0...3) {
+				for(z in 0...3) {
+					var c = new SubCube(s3d);
+					c.scale(0.9);
+					c.x = x;
+					c.y = y;
+					c.z = z;
+				}
+			}
+		}
+		
+		s3d.lightSystem.ambientLight.set(1, 1, 1);
 
 		new h3d.scene.CameraController(s3d).loadFromCamera();
 	}
 
 	override function update(dt: Float) {
 		t += dt;
-		
-
 	}
 
 	static function main() {
