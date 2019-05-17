@@ -15,8 +15,23 @@ import h3d.prim.Cube;
 	@date 2019-05-15
 */
 
-
-
+class SubCube extends Object {
+	public function new(parent: Object) {
+		super(parent);
+		
+		var a = new SubCubeFace(this, 0xffff00);
+		var b = new SubCubeFace(this, 0xff0000);
+		b.rotate(Math.PI / 2, 0, 0);
+		var c = new SubCubeFace(this, 0x0099ff);
+		c.rotate(0, 0, Math.PI / 2);
+		var d = new SubCubeFace(this, 0x00ff00);
+		d.rotate(0, 0, -Math.PI / 2);
+		var e = new SubCubeFace(this, 0xff9900);
+		e.rotate(-Math.PI / 2, 0, 0);
+		var f = new SubCubeFace(this, 0xffffff);
+		f.rotate(Math.PI, 0,  0);
+	}
+}
 
 class SubCubeFace extends Object {
 	public function new(parent: Object, color: UInt) {
@@ -55,36 +70,10 @@ class Main extends hxd.App {
 	var b: SubCubeFace = null;
 
 	override function init() {
-		// var cube = new Cube();
-		// cube.translate(-0.5, -0.5, -0.5);
-		// cube.addUVs();
-		// cube.unindex();
-		// cube.addNormals();
-		// var mesh = new Mesh(cube, s3d);
-		// mesh.material.color.setColor(0x0000ff);
-		// mesh.material.shadows = false;
 
-
-
-		var a = new SubCubeFace(s3d, 0xffff00);
-		var b = new SubCubeFace(s3d, 0xff0000);
-		b.rotate(Math.PI / 2, 0, 0);
-		var c = new SubCubeFace(s3d, 0x0099ff);
-		c.rotate(0, 0, Math.PI / 2);
-		var d = new SubCubeFace(s3d, 0x00ff00);
-		d.rotate(0, 0, -Math.PI / 2);
-		var e = new SubCubeFace(s3d, 0xff9900);
-		e.rotate(-Math.PI / 2, 0, 0);
-		var f = new SubCubeFace(s3d, 0xffffff);
-		//f.rotate(Math.PI / 2, 0, 0);
-		//f.y++;
-		f.rotate(Math.PI, 0,  0);
-
-		s3d.lightSystem.ambientLight.set(1, 1, 1);
-
+		new SubCube(s3d);
 
 		new h3d.scene.CameraController(s3d).loadFromCamera();
-
 	}
 
 	override function update(dt: Float) {
