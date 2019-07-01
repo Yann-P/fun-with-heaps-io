@@ -13,14 +13,55 @@ import h3d.prim.Cube;
 /*
 	@author Yann Pellegrini
 	@date 2019-05-15
-*/
+ */
+class SubCubeShader extends hxsl.Shader {
+	static var SRC = {
+		var pixelColor:Vec4;
+		@input var input:{
+			var normal:Vec3;
+		}
+		var nn:Vec3;
+		function vertex() {
+			nn = (input.normal + 1) * .5;
+			pixelColor.rgb = nn;
+			if (nn.r == 0.5 && nn.g == 0.5 && nn.b == 1) {
+				pixelColor.rgb = vec3(1, 0.5, 0);
+			}
+			if (nn.r == 0.5 && nn.g == 1 && nn.b == .5) {
+				pixelColor.rgb = vec3(1, 1, 1);
+			}
+			if (nn.r == 1 && nn.g == .5 && nn.b == .5) {
+				pixelColor.rgb = vec3(0, 0, 1);
+			}
+			if (nn.r == .5 && nn.g == 0 && nn.b == .5) {
+				pixelColor.rgb = vec3(1, 1, 0);
+			}
+			if (nn.r == .5 && nn.g == .5 && nn.b == 0) {
+				pixelColor.rgb = vec3(1, 0, 0);
+			}
+		}
+	};
 
+	public function new() {
+		super();
+	}
+}
 
-class SubCube extends Object {
-	public function new(parent: Object) {
+class ShadedSubCube extends Object {
+	public function new(parent:Object) {
 		super(parent);
-		var a = new SubCubeFace(this, 0xffff00);
-		var b = new SubCubeFace(this, 0xff0000);
+
+		var cube = new Cube();
+		cube.unindex();
+		cube.addUVs();
+		cube.addNormals();
+
+		var mesh = new Mesh(cube, this);
+		mesh.material.color.setColor(0x0000ff);
+		mesh.material.shadows = false;
+		mesh.material.mainPass.addShader(new SubCubeShader());
+	}
+}
 		b.rotate(Math.PI / 2, 0, 0);
 		var c = new SubCubeFace(this, 0x0099ff);
 		c.rotate(0, 0, Math.PI / 2);
